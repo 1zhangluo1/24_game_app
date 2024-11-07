@@ -15,9 +15,7 @@ class LoginViewModel : ViewModel(){
     private val _password = mutableStateOf("")
     var password: State<String> = _password
 
-    private val _isLoading = mutableStateOf(false)
-    val isLoading: State<Boolean> = _isLoading
-    val isLoading1 = mutableStateOf(false)
+    val isLoading = mutableStateOf(false)
 
     private val _loginSuccess = mutableStateOf(false)
     val loginSuccess: State<Boolean> = _loginSuccess
@@ -31,10 +29,10 @@ class LoginViewModel : ViewModel(){
     }
 
     fun login() {
-        _isLoading.value = true
+        isLoading.value = true
         viewModelScope.launch {
             delay(2000)
-            _isLoading.value = false
+            isLoading.value = false
             _loginSuccess.value = username.value == "user" && password.value == "password"
         }
     }

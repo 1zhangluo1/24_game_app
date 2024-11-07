@@ -1,5 +1,6 @@
 package ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,12 +18,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import data.model.ValidMessage
+import kotlinx.coroutines.flow.collectLatest
 import ui.components.BackIcons
 import viewModels.RegisterViewModel
 
@@ -30,7 +35,24 @@ import viewModels.RegisterViewModel
 @Composable
 fun RegisterPage( viewModel: RegisterViewModel = RegisterViewModel(), navController: NavController ) {
 
+    val context = LocalContext.current
     val registerAccount = viewModel.registerAccount
+    val registerPassword = viewModel.registerPassword
+    val registerConfirmPassword = viewModel.registerConfirmPassword
+
+    LaunchedEffect(viewModel.validationPasswordEvent) {
+        viewModel.validationPasswordEvent.collectLatest { result ->
+            when (result) {
+                is ValidMessage.Success -> {
+                    Toast.makeText(context, "验证成功", Toast.LENGTH_SHORT).show()
+                    navController.popBackStack()
+                }
+                is ValidMessage.Error -> {
+                    Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
 
     Scaffold (
         modifier = Modifier.fillMaxSize(),
@@ -60,23 +82,25 @@ fun RegisterPage( viewModel: RegisterViewModel = RegisterViewModel(), navControl
             Spacer(modifier = Modifier.height(20.dp))
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = viewModel.registerPassword.value,
-                onValueChange = { viewModel.registerPassword.value = it },
+                value = registerPassword.value,
+                onValueChange = { registerPassword.value = it },
                 label = { Text(text = "密码")},
                 shape = RoundedCornerShape(12.dp),
             )
             Spacer(modifier = Modifier.height(15.dp))
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = viewModel.registerConfirmPassword.value,
-                onValueChange = { viewModel.registerConfirmPassword.value = it },
+                value = registerConfirmPassword.value,
+                onValueChange = { registerConfirmPassword.value = it },
                 label = { Text(text = "再次输入密码")},
                 shape = RoundedCornerShape(12.dp),
             )
             Spacer(modifier = Modifier.height(15.dp))
             ElevatedButton(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = { println("注册") },
+                onClick = {
+                    viewModel.validatePasswords()
+                },
                 contentPadding = PaddingValues(vertical = 15.dp),
                 colors = ButtonDefaults.elevatedButtonColors(
                     Color(0xFF4FB4F7),

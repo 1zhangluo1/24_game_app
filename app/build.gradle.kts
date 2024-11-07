@@ -51,6 +51,7 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.tools.core)
     val nav_version = "2.8.0"
     implementation("androidx.navigation:navigation-compose:$nav_version")
     implementation(libs.okhttp)

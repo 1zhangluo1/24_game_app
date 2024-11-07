@@ -39,9 +39,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ui.components.BackIcons
 import ui.components.LoadingDialog
 import viewModels.LoginViewModel
@@ -53,15 +55,11 @@ fun LoginPage(viewModel: LoginViewModel = LoginViewModel(), navController: NavCo
     val userName by viewModel.username
     val password by viewModel.password
     val isLoading by viewModel.isLoading
-    val loginSuccess by viewModel.loginSuccess
 
     Scaffold (
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
-                navigationIcon = {
-                    BackIcons(naviController = navController)
-                },
                 title = {
                     Text("登录")
                 }
@@ -117,11 +115,15 @@ fun LoginPage(viewModel: LoginViewModel = LoginViewModel(), navController: NavCo
             Spacer(modifier = Modifier.height(10.dp))
             ElevatedButton(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = { if (!viewModel.isLoading1.value) {
-                    viewModel.isLoading1.value = true
+                onClick = { if (!viewModel.isLoading.value) {
+                    viewModel.isLoading.value = true
                     GlobalScope.launch {
-                        delay(2000)
-                        viewModel.isLoading1.value = false
+                        delay(500)
+                        viewModel.isLoading.value = false
+                        withContext(Dispatchers.Main) {
+                            navController.popBackStack()
+                            navController.navigate("game")
+                        }
                     }
                 } },
                 contentPadding = PaddingValues(vertical = 15.dp),
@@ -133,5 +135,5 @@ fun LoginPage(viewModel: LoginViewModel = LoginViewModel(), navController: NavCo
             }
         }
     }
-    LoadingDialog(text = "加载中...", isLoading = viewModel.isLoading1)
+    LoadingDialog(text = "加载中...", isLoading = viewModel.isLoading)
 }
