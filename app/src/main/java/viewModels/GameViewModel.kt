@@ -4,10 +4,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.delay
 import ui.theme.Purple80
 
 class GameViewModel: ViewModel() {
 
+    val isFlipped = mutableStateOf(false)
     val inputExpression = mutableStateOf("")
     val cardColorList: List<Color> = listOf(Purple80,Color.Cyan,)
     val gradientBrush = Brush.radialGradient(
