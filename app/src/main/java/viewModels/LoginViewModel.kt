@@ -17,6 +17,7 @@ class LoginViewModel : ViewModel(){
 
     private val _isLoading = mutableStateOf(false)
     val isLoading: State<Boolean> = _isLoading
+    val isLoading1 = mutableStateOf(false)
 
     private val _loginSuccess = mutableStateOf(false)
     val loginSuccess: State<Boolean> = _loginSuccess
