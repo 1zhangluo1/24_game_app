@@ -3,12 +3,18 @@ package ui.components
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardElevation
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,12 +36,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zhangluo.twentyfourgame.R
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import ui.theme.Purple80
 
 
 @Composable
-fun FlippingCard( isFlipped: MutableState<Boolean> ) {
+fun FlippingCard( isFlipped: MutableState<Boolean>, color: Color, number: String) {
     val rotateY = remember { Animatable(0f) }
+
     LaunchedEffect(isFlipped.value) {
         val targetRotation = if (isFlipped.value) 180f else 0f
         rotateY.animateTo(
@@ -50,14 +59,14 @@ fun FlippingCard( isFlipped: MutableState<Boolean> ) {
                 cameraDistance = 12 * density // 调整摄像机距离以获得更好的3D效果
             }
             .clickable {
-                isFlipped.value = !isFlipped.value
+
             }
             .clipToBounds()
     ) {
         if (rotateY.value <= 90 || rotateY.value >= 270) {
             NumberCardBack()
         } else {
-            NumberCardFront(number = "24", color = Purple80)
+            NumberCardFront(number = number, color = color)
         }
     }
 }
@@ -65,6 +74,7 @@ fun FlippingCard( isFlipped: MutableState<Boolean> ) {
 @Composable
 fun NumberCardFront(number: String, color: Color) {
     Card(
+        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
         colors = CardDefaults.cardColors(
             containerColor = color,
         ),
