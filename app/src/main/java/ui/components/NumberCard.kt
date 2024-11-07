@@ -55,9 +55,9 @@ fun FlippingCard( isFlipped: MutableState<Boolean> ) {
             .clipToBounds()
     ) {
         if (rotateY.value <= 90 || rotateY.value >= 270) {
-            NumberCardFront(number = "24", color = Purple80)
-        } else {
             NumberCardBack()
+        } else {
+            NumberCardFront(number = "24", color = Purple80)
         }
     }
 }
@@ -68,7 +68,9 @@ fun NumberCardFront(number: String, color: Color) {
         colors = CardDefaults.cardColors(
             containerColor = color,
         ),
-        modifier = Modifier.size(width = 70.dp, height = 120.dp)
+        modifier = Modifier
+            .size(width = 70.dp, height = 120.dp)
+            .graphicsLayer { scaleX = -1f }
     ) {
         Box ( Modifier.fillMaxSize() ) {
             Text(

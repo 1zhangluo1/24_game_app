@@ -1,4 +1,6 @@
 package navigation
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -7,6 +9,7 @@ import ui.screens.GamePage
 import ui.screens.LoginPage
 import ui.screens.RegisterPage
 
+@RequiresApi(Build.VERSION_CODES.R)
 @Composable
 fun AppNaviRoute(navController : NavHostController) {
     NavHost(

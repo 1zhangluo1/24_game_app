@@ -40,11 +40,8 @@ fun GamePage(viewModel: GameViewModel = viewModel(), navController: NavControlle
             val flags = decorView.systemUiVisibility
             flags or WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS
         }
-        println(viewModel.isFlipped.value)
-        delay(3000)
-        println("反转了")
+        delay(1000)
         viewModel.isFlipped.value = !viewModel.isFlipped.value
-        println(viewModel.isFlipped.value)
     }
 
     Box(
@@ -66,10 +63,6 @@ fun GamePage(viewModel: GameViewModel = viewModel(), navController: NavControlle
                 FlippingCard(isFlipped = viewModel.isFlipped)
                 FlippingCard(isFlipped = viewModel.isFlipped)
                 FlippingCard(isFlipped = viewModel.isFlipped)
-            }
-            Button(onClick = { viewModel.isFlipped.value = !viewModel.isFlipped.value
-                println(viewModel.isFlipped.value)}) {
-                
             }
         }
     }
